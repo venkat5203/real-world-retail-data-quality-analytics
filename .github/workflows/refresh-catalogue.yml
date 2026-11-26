@@ -35,7 +35,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add reports/dashboard_data.json reports/data_quality_audit.csv reports/kpis.json reports/source_verification.json dashboard/public/data/dashboard_data.json reports/products_current_2026.csv
+          git add reports/dashboard_data.json reports/data_quality_audit.csv reports/kpis.json reports/source_verification.json dashboard/public/data/dashboard_data.json
+          git add -f reports/products_current_2026.csv
           if ! git diff --cached --quiet; then
             git commit -m "Refresh 2026 Open Food Facts catalogue quality audit"
             git pull --rebase origin main
