@@ -235,7 +235,7 @@ def main():
     raw_path = RAW / "open_food_facts_2026_snapshot.json"
     raw_payload = {
         "source": API_URL,
-        "shared_snapshot_url": RAW_DASHBOARD_SNAPSHOT_URL if duplicate_audit_available else DASHBOARD_SNAPSHOT_URL,
+        "shared_snapshot_url": RAW_SNAPSHOT_URL if duplicate_audit_available else DASHBOARD_SNAPSHOT_URL,
         "retrieved_at_utc": source_metadata.get("retrieved_at_utc") or datetime.now(timezone.utc).isoformat(),
         "cutoff_utc": CUTOFF.isoformat(),
         "page_info": page_info,
@@ -309,7 +309,7 @@ def main():
     manifest = {
         "dataset": "Open Food Facts product catalogue snapshot",
         "api_endpoint": API_URL,
-        "shared_snapshot_url": RAW_DASHBOARD_SNAPSHOT_URL if duplicate_audit_available else DASHBOARD_SNAPSHOT_URL,
+        "shared_snapshot_url": RAW_SNAPSHOT_URL if duplicate_audit_available else DASHBOARD_SNAPSHOT_URL,
         "source_url": SOURCE_URL,
         "license": LICENSE,
         "attribution": "Open Food Facts contributors",
@@ -338,7 +338,7 @@ def main():
             "source": "Open Food Facts",
             "source_url": SOURCE_URL,
             "api_endpoint": API_URL,
-            "shared_snapshot_url": RAW_DASHBOARD_SNAPSHOT_URL if duplicate_audit_available else DASHBOARD_SNAPSHOT_URL,
+            "shared_snapshot_url": RAW_SNAPSHOT_URL if duplicate_audit_available else DASHBOARD_SNAPSHOT_URL,
             "license": LICENSE,
             "attribution": "Open Food Facts contributors",
             "retrieved_at_utc": raw_payload["retrieved_at_utc"],
