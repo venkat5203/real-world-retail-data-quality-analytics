@@ -2,11 +2,20 @@ name: Refresh 2026 product catalogue
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "src/pipeline.py"
+      - ".github/workflows/refresh-catalogue.yml"
   schedule:
-    - cron: "17 3 * * 1"
+    - cron: "15 4 * * 1"
 
 permissions:
   contents: write
+
+concurrency:
+  group: retail-product-quality-refresh
+  cancel-in-progress: false
 
 jobs:
   refresh:
@@ -26,5 +35,11 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add reports/dashboard_data.json reports/data_quality_audit.csv reports/kpis.json reports/source_verification.json dashboard/public/data/dashboard_data.json
-          git diff --cached --quiet || (git commit -m "Refresh 2026 Open Food Facts catalogue snapshot" && git push)
+          git add reports/dashboard_data.json reports/data_quality_audit.csv reports/kpis.json reports/source_verification.json dashboard/public/data/dashboard_data.json reports/products_current_2026.csv
+          if ! git diff --cached --quiet; then
+            git commit -m "Refresh 2026 Open Food Facts catalogue quality audit"
+            git pull --rebase origin main
+            git push
+          else
+            echo "No generated quality-report changes to commit."
+          fi
