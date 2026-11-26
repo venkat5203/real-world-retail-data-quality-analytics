@@ -21,7 +21,7 @@ REPORTS = ROOT / "reports"
 DASHBOARD_DATA = ROOT / "dashboard" / "public" / "data" / "dashboard_data.json"
 API_URL = "https://world.openfoodfacts.org/api/v2/search"
 SOURCE_URL = "https://world.openfoodfacts.org/"
-RAW_DASHBOARD_SNAPSHOT_URL = "https://raw.githubusercontent.com/venkat5203/retailrocket-recommender/main/retailrocket-recommender/reports/source_products_2026.json"
+RAW_SNAPSHOT_URL = "https://raw.githubusercontent.com/venkat5203/retailrocket-recommender/main/retailrocket-recommender/reports/source_products_2026.json"
 DASHBOARD_SNAPSHOT_URL = "https://raw.githubusercontent.com/venkat5203/retailrocket-recommender/main/retailrocket-recommender/data.js"
 LICENSE = "Open Database License (ODbL) 1.0"
 CUTOFF = datetime(2026, 1, 1, tzinfo=timezone.utc)
