@@ -1,15 +1,15 @@
 {
-  "products_in_snapshot": 100,
-  "average_selected_field_completeness_pct": 51.0,
-  "missing_brand_rows": 46,
-  "missing_category_rows": 64,
-  "missing_ingredients_rows": 39,
-  "missing_nutrition_rows": 66,
-  "invalid_nutrient_rows": 0,
-  "duplicate_barcode_rows": 0,
-  "products_updated_in_2026": 100,
-  "unique_categories": 13,
-  "unique_brands": 34,
-  "earliest_product_update_utc": "2026-11-24T14:40:40+00:00",
-  "latest_product_update_utc": "2026-11-26T15:43:41+00:00"
+  "source_rows": 541909,
+  "exact_duplicates": 5268,
+  "missing_customer_id_rows": 135080,
+  "cancellation_invoice_rows": 9288,
+  "nonpositive_quantity_rows": 10624,
+  "nonpositive_unit_price_rows": 2517,
+  "clean_positive_sale_rows": 524878,
+  "clean_positive_sales_revenue_gbp": 10642110.8,
+  "countries": 38,
+  "unique_customers_with_id": 4338,
+  "source_start_date": "2010-12-01 08:26:00",
+  "source_end_date": "2011-12-09 12:50:00",
+  "cleaning_policy": "Exact duplicates removed; positive quantity/price and valid dates included in positive-sales analysis. Missing customer IDs retained for sales analysis."
 }
