@@ -4,6 +4,7 @@ __pycache__/
 data/raw/
 reports/clean_transactions.csv
 reports/analysis.sqlite
+reports/products_current_2026.csv
 node_modules/
 dashboard/node_modules/
 dashboard/dist/
