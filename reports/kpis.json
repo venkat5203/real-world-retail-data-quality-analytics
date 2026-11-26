@@ -1,15 +1,5 @@
 {
-  "source_rows": 541909,
-  "exact_duplicates": 5268,
-  "missing_customer_id_rows": 135080,
-  "cancellation_invoice_rows": 9288,
-  "nonpositive_quantity_rows": 10624,
-  "nonpositive_unit_price_rows": 2517,
-  "clean_positive_sale_rows": 524878,
-  "clean_positive_sales_revenue_gbp": 10642110.8,
-  "countries": 38,
-  "unique_customers_with_id": 4338,
-  "source_start_date": "2010-12-01 08:26:00",
-  "source_end_date": "2011-12-09 12:50:00",
-  "cleaning_policy": "Exact duplicates removed; positive quantity/price and valid dates included in positive-sales analysis. Missing customer IDs retained for sales analysis."
+  "status": "pending",
+  "message": "Refresh required: run python src/pipeline.py to fetch Open Food Facts products whose last-modified timestamp is on or after 2026-01-01 UTC. Historical UCI transaction data is intentionally not displayed.",
+  "required_last_modified_from_utc": "2026-01-01T00:00:00+00:00"
 }
