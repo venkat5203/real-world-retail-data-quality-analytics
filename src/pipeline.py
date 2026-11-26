@@ -21,7 +21,8 @@ REPORTS = ROOT / "reports"
 DASHBOARD_DATA = ROOT / "dashboard" / "public" / "data" / "dashboard_data.json"
 API_URL = "https://world.openfoodfacts.org/api/v2/search"
 SOURCE_URL = "https://world.openfoodfacts.org/"
-SNAPSHOT_URL = "https://raw.githubusercontent.com/venkat5203/retailrocket-recommender/main/retailrocket-recommender/data.js"
+RAW_DASHBOARD_SNAPSHOT_URL = "https://raw.githubusercontent.com/venkat5203/retailrocket-recommender/main/retailrocket-recommender/reports/source_products_2026.json"
+DASHBOARD_SNAPSHOT_URL = "https://raw.githubusercontent.com/venkat5203/retailrocket-recommender/main/retailrocket-recommender/data.js"
 LICENSE = "Open Database License (ODbL) 1.0"
 CUTOFF = datetime(2026, 1, 1, tzinfo=timezone.utc)
 CUTOFF_EPOCH = int(CUTOFF.timestamp())
@@ -64,102 +65,114 @@ def timestamp_iso(value):
 
 
 def fetch_latest_products():
-    """Reuse the verified 2026 product snapshot produced by the recommender project.
+    """Reuse the recommender project's current Open Food Facts snapshot.
 
-    Both dashboards now analyze the same point-in-time Open Food Facts catalogue.
-    This avoids a second set of requests to the rate-limited Open Food Facts API.
+    Prefer the un-deduplicated source response so this pipeline can audit duplicate
+    barcodes. Fall back to the recommender dashboard export until the next refresh
+    publishes that raw source file.
     """
     session = requests.Session()
     session.headers.update({
-        "User-Agent": "VenkatRetailDataQuality/2.1",
-        "Accept": "application/javascript, application/json, */*",
+        "User-Agent": "VenkatRetailDataQuality/2.2",
+        "Accept": "application/json, application/javascript, */*",
     })
 
-    response = None
-    for attempt in range(4):
-        response = session.get(SNAPSHOT_URL, timeout=90)
-        if response.status_code in (429, 503):
-            retry_after = response.headers.get("Retry-After", "20")
-            try:
-                wait_seconds = int(retry_after)
-            except (TypeError, ValueError):
-                wait_seconds = 20
-            time.sleep(min(max(wait_seconds, 10), 90))
-            continue
-        response.raise_for_status()
-        break
+    def get_snapshot(url, allow_missing=False):
+        for attempt in range(4):
+            response = session.get(url, timeout=90)
+            if response.status_code == 404 and allow_missing:
+                return None
+            if response.status_code in (429, 503):
+                retry_after = response.headers.get("Retry-After")
+                try:
+                    wait_seconds = int(retry_after) if retry_after else min(15 * (2 ** attempt), 90)
+                except (TypeError, ValueError):
+                    wait_seconds = min(15 * (2 ** attempt), 90)
+                time.sleep(min(max(wait_seconds, 10), 90))
+                continue
+            response.raise_for_status()
+            return response
+        raise RuntimeError("The shared GitHub catalogue snapshot remained unavailable after retries.")
+
+    raw_response = get_snapshot(RAW_SNAPSHOT_URL, allow_missing=True)
+    raw_snapshot_available = raw_response is not None
+    if raw_snapshot_available:
+        try:
+            snapshot = raw_response.json()
+        except ValueError as exc:
+            raise RuntimeError("The shared raw catalogue snapshot is not valid JSON.") from exc
+        source_metadata = snapshot.get("metadata") or {}
+        raw_products = snapshot.get("products") or []
+        page_info = dict(snapshot.get("page_info") or {})
     else:
-        raise RuntimeError("The shared GitHub catalogue snapshot is temporarily unavailable.")
+        response = get_snapshot(DASHBOARD_SNAPSHOT_URL)
+        body = response.text.strip()
+        prefix = "window.DASHBOARD_DATA = "
+        if body.startswith(prefix):
+            body = body[len(prefix):].rstrip()
+            if body.endswith(";"):
+                body = body[:-1]
+        try:
+            dashboard = json.loads(body)
+        except json.JSONDecodeError as exc:
+            raise RuntimeError("The shared recommender dashboard file is not valid JSON.") from exc
 
-    body = response.text.strip()
-    prefix = "window.DASHBOARD_DATA = "
-    if body.startswith(prefix):
-        body = body[len(prefix):].rstrip()
-        if body.endswith(";"):
-            body = body[:-1]
+        source_metadata = dashboard.get("metadata") or {}
+        raw_products = []
+        for product in dashboard.get("products") or []:
+            categories = product.get("categories") or []
+            if not isinstance(categories, list):
+                categories = [str(categories)]
+            if not categories and product.get("category") not in (None, "", "Uncategorized"):
+                categories = [str(product.get("category"))]
+            nutriments = {
+                "energy-kcal_100g": product.get("energy_kcal_100g"),
+                "fat_100g": product.get("fat_100g"),
+                "saturated-fat_100g": product.get("saturated_fat_100g"),
+                "carbohydrates_100g": product.get("carbohydrates_100g"),
+                "sugars_100g": product.get("sugars_100g"),
+                "proteins_100g": product.get("proteins_100g"),
+                "salt_100g": product.get("salt_100g"),
+                "fiber_100g": product.get("fiber_100g"),
+            }
+            raw_products.append({
+                "code": product.get("barcode"),
+                "product_name": product.get("name"),
+                "brands": product.get("brands") or product.get("brand"),
+                "categories_tags_en": categories,
+                "quantity": product.get("quantity"),
+                "last_modified_t": product.get("last_modified_t"),
+                "created_t": product.get("created_t"),
+                "ingredients_text": product.get("ingredients"),
+                "nutriments": nutriments,
+                "nutrition_grades": product.get("nutrition_grade"),
+                "image_url": product.get("image_url"),
+                "countries_tags": product.get("countries_tags") or [],
+            })
+        page_info = dict(source_metadata.get("page_info") or {})
 
-    try:
-        snapshot = json.loads(body)
-    except json.JSONDecodeError as exc:
-        raise RuntimeError("The shared catalogue file is not valid JSON dashboard data.") from exc
-
-    source_metadata = snapshot.get("metadata") or {}
-    products = snapshot.get("products") or []
-    if not products:
+    if not isinstance(raw_products, list) or not raw_products:
         raise RuntimeError("The shared catalogue snapshot contains no product records.")
 
-    shared_products = []
-    for product in products:
-        categories = product.get("categories") or []
-        if not isinstance(categories, list):
-            categories = [str(categories)]
-        if not categories and product.get("category") not in (None, "", "Uncategorized"):
-            categories = [str(product.get("category"))]
-
-        nutriments = {
-            "energy-kcal_100g": product.get("energy_kcal_100g"),
-            "fat_100g": product.get("fat_100g"),
-            "saturated-fat_100g": product.get("saturated_fat_100g"),
-            "carbohydrates_100g": product.get("carbohydrates_100g"),
-            "sugars_100g": product.get("sugars_100g"),
-            "proteins_100g": product.get("proteins_100g"),
-            "salt_100g": product.get("salt_100g"),
-            "fiber_100g": product.get("fiber_100g"),
-        }
-        shared_products.append({
-            "code": product.get("barcode"),
-            "product_name": product.get("name"),
-            "brands": product.get("brands") or product.get("brand"),
-            "categories_tags_en": categories,
-            "quantity": product.get("quantity"),
-            "last_modified_t": product.get("last_modified_t"),
-            "created_t": product.get("created_t"),
-            "ingredients_text": product.get("ingredients"),
-            "nutriments": nutriments,
-            "nutrition_grades": product.get("nutrition_grade"),
-            "completeness": product.get("completeness"),
-            "image_url": product.get("image_url"),
-            "countries_tags": product.get("countries_tags") or [],
-        })
-
     recent = [
-        product for product in shared_products
+        product for product in raw_products
         if int(product.get("last_modified_t") or 0) >= CUTOFF_EPOCH
     ]
     if not recent:
         raise RuntimeError(
-            "The shared snapshot contains no products last modified since 2026-01-01 UTC. "
-            "No older records were substituted."
+            "The shared catalogue contains no products last modified since 2026-01-01 UTC. "
+            "No historical records were substituted."
         )
 
-    page_info = dict(source_metadata.get("page_info") or {})
     page_info.update({
-        "shared_snapshot_url": SNAPSHOT_URL,
-        "records_received_from_shared_snapshot": len(products),
+        "shared_raw_snapshot_url": RAW_SNAPSHOT_URL if raw_snapshot_available else None,
+        "shared_dashboard_snapshot_url": DASHBOARD_SNAPSHOT_URL,
+        "snapshot_mode": "un-deduplicated source records" if raw_snapshot_available else "dashboard export (already deduplicated)",
+        "duplicate_audit_available": raw_snapshot_available,
+        "records_received_from_shared_snapshot": len(raw_products),
         "records_after_2026_filter": len(recent),
-        "source_retrieved_at_utc": source_metadata.get("retrieved_at_utc"),
     })
-    return recent, page_info, source_metadata
+    return recent, page_info, source_metadata, raw_snapshot_available
 
 def normalize(product):
     nutriments = product.get("nutriments") or {}
@@ -203,14 +216,20 @@ def main():
     RAW.mkdir(parents=True, exist_ok=True)
     REPORTS.mkdir(parents=True, exist_ok=True)
     print("Fetching the most recently modified Open Food Facts product records...")
-    raw_products, page_info, source_metadata = fetch_latest_products()
+    raw_products, page_info, source_metadata, duplicate_audit_available = fetch_latest_products()
     records = [normalize(p) for p in raw_products]
     raw_frame = pd.DataFrame(records).sort_values("last_modified_epoch", ascending=False).reset_index(drop=True)
     raw_frame = raw_frame[raw_frame["last_modified_epoch"] >= CUTOFF_EPOCH].copy()
     if raw_frame.empty:
         raise RuntimeError("No 2026-updated products remain after normalization; stopping.")
-    duplicate_rows = int(raw_frame["barcode"].duplicated(keep="first").sum())
-    frame = raw_frame.drop_duplicates(subset=["barcode"], keep="first").copy()
+    if duplicate_audit_available:
+        nonblank_codes = raw_frame.loc[raw_frame["barcode"].ne(""), "barcode"]
+        duplicate_rows = int(nonblank_codes.duplicated(keep="first").sum())
+    else:
+        duplicate_rows = None
+    with_codes = raw_frame.loc[raw_frame["barcode"].ne("")].drop_duplicates(subset=["barcode"], keep="first")
+    without_codes = raw_frame.loc[raw_frame["barcode"].eq("")]
+    frame = pd.concat([with_codes, without_codes], ignore_index=True)
     frame["last_modified_month"] = pd.to_datetime(frame["last_modified_epoch"], unit="s", utc=True).dt.strftime("%Y-%m")
 
     raw_path = RAW / "open_food_facts_2026_snapshot.json"
@@ -252,8 +271,10 @@ def main():
         "field": "Duplicate barcodes",
         "rule": "duplicate_barcodes",
         "flagged_count": duplicate_rows,
-        "flagged_pct": round(100 * duplicate_rows / max(len(raw_frame), 1), 2),
-        "distinct_values": int(frame["barcode"].nunique()),
+        "flagged_pct": round(100 * duplicate_rows / max(len(raw_frame), 1), 2) if duplicate_rows is not None else None,
+        "distinct_values": int(frame.loc[frame["barcode"].ne(""), "barcode"].nunique()),
+        "status": "assessed" if duplicate_audit_available else "not_testable_from_deduplicated_input",
+        "note": "" if duplicate_audit_available else "The shared dashboard export is already deduplicated; this check becomes available after the source-record export is published.",
     })
 
     missing_brand = int(frame["brands"].eq("").sum())
