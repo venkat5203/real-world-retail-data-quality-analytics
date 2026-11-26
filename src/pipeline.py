@@ -233,8 +233,13 @@ def main():
     frame["last_modified_month"] = pd.to_datetime(frame["last_modified_epoch"], unit="s", utc=True).dt.strftime("%Y-%m")
 
     raw_path = RAW / "open_food_facts_2026_snapshot.json"
+    actual_api_endpoint = (
+        page_info.get("api_url")
+        or source_metadata.get("api_url")
+        or API_URL
+    )
     raw_payload = {
-        "source": API_URL,
+        "source": actual_api_endpoint,
         "shared_snapshot_url": RAW_SNAPSHOT_URL if duplicate_audit_available else DASHBOARD_SNAPSHOT_URL,
         "retrieved_at_utc": source_metadata.get("retrieved_at_utc") or datetime.now(timezone.utc).isoformat(),
         "cutoff_utc": CUTOFF.isoformat(),
@@ -308,7 +313,7 @@ def main():
     }
     manifest = {
         "dataset": "Open Food Facts product catalogue snapshot",
-        "api_endpoint": API_URL,
+        "api_endpoint": actual_api_endpoint,
         "shared_snapshot_url": RAW_SNAPSHOT_URL if duplicate_audit_available else DASHBOARD_SNAPSHOT_URL,
         "source_url": SOURCE_URL,
         "license": LICENSE,
@@ -337,7 +342,7 @@ def main():
         "metadata": {
             "source": "Open Food Facts",
             "source_url": SOURCE_URL,
-            "api_endpoint": API_URL,
+            "api_endpoint": actual_api_endpoint,
             "shared_snapshot_url": RAW_SNAPSHOT_URL if duplicate_audit_available else DASHBOARD_SNAPSHOT_URL,
             "license": LICENSE,
             "attribution": "Open Food Facts contributors",
