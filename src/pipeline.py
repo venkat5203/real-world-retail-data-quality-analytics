@@ -21,6 +21,7 @@ REPORTS = ROOT / "reports"
 DASHBOARD_DATA = ROOT / "dashboard" / "public" / "data" / "dashboard_data.json"
 API_URL = "https://world.openfoodfacts.org/api/v2/search"
 SOURCE_URL = "https://world.openfoodfacts.org/"
+SNAPSHOT_URL = "https://raw.githubusercontent.com/venkat5203/retailrocket-recommender/main/retailrocket-recommender/data.js"
 LICENSE = "Open Database License (ODbL) 1.0"
 CUTOFF = datetime(2026, 1, 1, tzinfo=timezone.utc)
 CUTOFF_EPOCH = int(CUTOFF.timestamp())
@@ -62,77 +63,103 @@ def timestamp_iso(value):
         return ""
 
 
-def request_page(session, page):
-    params = {
-        "page": page,
-        "page_size": PAGE_SIZE,
-        "sort_by": "last_modified_t",
-        "fields": FIELDS,
-    }
-    for attempt in range(4):
-        response = session.get(API_URL, params=params, timeout=45)
-        if response.status_code in (429, 503):
-            wait = int(response.headers.get("Retry-After", "30"))
-            time.sleep(min(max(wait, 15), 120))
-            continue
-        response.raise_for_status()
-        payload = response.json()
-        if "products" not in payload:
-            raise RuntimeError("Open Food Facts response did not contain a products list.")
-        return payload
-    raise RuntimeError("Open Food Facts rate limit persisted after retries.")
-
-
 def fetch_latest_products():
+    """Reuse the verified 2026 product snapshot produced by the recommender project.
+
+    Both dashboards now analyze the same point-in-time Open Food Facts catalogue.
+    This avoids a second set of requests to the rate-limited Open Food Facts API.
+    """
     session = requests.Session()
     session.headers.update({
-        "User-Agent": "VenkatRetailDataQuality/2.0 (venkata.nemani99@gmail.com)",
-        "Accept": "application/json",
+        "User-Agent": "VenkatRetailDataQuality/2.1",
+        "Accept": "application/javascript, application/json, */*",
     })
-    first = request_page(session, 1)
-    count = int(first.get("count") or 0)
-    total_pages = max(1, math.ceil(count / PAGE_SIZE))
-    first_products = first.get("products", [])
-    stamps = [int(p.get("last_modified_t") or 0) for p in first_products]
-    descending = not stamps or stamps[0] >= stamps[-1]
 
-    if descending:
-        pages = list(range(1, min(MAX_PAGES, total_pages) + 1))
+    response = None
+    for attempt in range(4):
+        response = session.get(SNAPSHOT_URL, timeout=90)
+        if response.status_code in (429, 503):
+            retry_after = response.headers.get("Retry-After", "20")
+            try:
+                wait_seconds = int(retry_after)
+            except (TypeError, ValueError):
+                wait_seconds = 20
+            time.sleep(min(max(wait_seconds, 10), 90))
+            continue
+        response.raise_for_status()
+        break
     else:
-        first_page = max(1, total_pages - MAX_PAGES + 1)
-        pages = list(range(first_page, total_pages + 1))
+        raise RuntimeError("The shared GitHub catalogue snapshot is temporarily unavailable.")
 
-    responses = []
-    for page in pages:
-        if page == 1:
-            payload = first
-        else:
-            time.sleep(REQUEST_GAP_SECONDS)
-            payload = request_page(session, page)
-        responses.append({"page": page, "count": payload.get("count"), "products": payload.get("products", [])})
+    body = response.text.strip()
+    prefix = "window.DASHBOARD_DATA = "
+    if body.startswith(prefix):
+        body = body[len(prefix):].rstrip()
+        if body.endswith(";"):
+            body = body[:-1]
 
-    raw_products = [p for response in responses for p in response["products"]]
-    recent = [p for p in raw_products if int(p.get("last_modified_t") or 0) >= CUTOFF_EPOCH]
-    unique_codes = {str(p.get("code") or "").strip() for p in recent if str(p.get("code") or "").strip()}
+    try:
+        snapshot = json.loads(body)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError("The shared catalogue file is not valid JSON dashboard data.") from exc
 
+    source_metadata = snapshot.get("metadata") or {}
+    products = snapshot.get("products") or []
+    if not products:
+        raise RuntimeError("The shared catalogue snapshot contains no product records.")
+
+    shared_products = []
+    for product in products:
+        categories = product.get("categories") or []
+        if not isinstance(categories, list):
+            categories = [str(categories)]
+        if not categories and product.get("category") not in (None, "", "Uncategorized"):
+            categories = [str(product.get("category"))]
+
+        nutriments = {
+            "energy-kcal_100g": product.get("energy_kcal_100g"),
+            "fat_100g": product.get("fat_100g"),
+            "saturated-fat_100g": product.get("saturated_fat_100g"),
+            "carbohydrates_100g": product.get("carbohydrates_100g"),
+            "sugars_100g": product.get("sugars_100g"),
+            "proteins_100g": product.get("proteins_100g"),
+            "salt_100g": product.get("salt_100g"),
+            "fiber_100g": product.get("fiber_100g"),
+        }
+        shared_products.append({
+            "code": product.get("barcode"),
+            "product_name": product.get("name"),
+            "brands": product.get("brands") or product.get("brand"),
+            "categories_tags_en": categories,
+            "quantity": product.get("quantity"),
+            "last_modified_t": product.get("last_modified_t"),
+            "created_t": product.get("created_t"),
+            "ingredients_text": product.get("ingredients"),
+            "nutriments": nutriments,
+            "nutrition_grades": product.get("nutrition_grade"),
+            "completeness": product.get("completeness"),
+            "image_url": product.get("image_url"),
+            "countries_tags": product.get("countries_tags") or [],
+        })
+
+    recent = [
+        product for product in shared_products
+        if int(product.get("last_modified_t") or 0) >= CUTOFF_EPOCH
+    ]
     if not recent:
-        latest = max(stamps, default=0)
-        latest_text = timestamp_iso(latest) or "unavailable"
         raise RuntimeError(
-            "The API query returned no products updated since 2026-01-01. "
-            f"First page latest timestamp: {latest_text}. No old records were substituted."
+            "The shared snapshot contains no products last modified since 2026-01-01 UTC. "
+            "No older records were substituted."
         )
 
-    return recent, {
-        "total_matching_products_reported_by_api": count,
-        "pages_requested": pages,
-        "page_size": PAGE_SIZE,
-        "records_received_before_2026_filter": len(raw_products),
-        "records_after_2026_filter_before_deduplication": len(recent),
-        "unique_barcodes_after_2026_filter": len(unique_codes),
-        "sort_direction_detected": "descending" if descending else "ascending",
-    }
-
+    page_info = dict(source_metadata.get("page_info") or {})
+    page_info.update({
+        "shared_snapshot_url": SNAPSHOT_URL,
+        "records_received_from_shared_snapshot": len(products),
+        "records_after_2026_filter": len(recent),
+        "source_retrieved_at_utc": source_metadata.get("retrieved_at_utc"),
+    })
+    return recent, page_info, source_metadata
 
 def normalize(product):
     nutriments = product.get("nutriments") or {}
@@ -176,7 +203,7 @@ def main():
     RAW.mkdir(parents=True, exist_ok=True)
     REPORTS.mkdir(parents=True, exist_ok=True)
     print("Fetching the most recently modified Open Food Facts product records...")
-    raw_products, page_info = fetch_latest_products()
+    raw_products, page_info, source_metadata = fetch_latest_products()
     records = [normalize(p) for p in raw_products]
     raw_frame = pd.DataFrame(records).sort_values("last_modified_epoch", ascending=False).reset_index(drop=True)
     raw_frame = raw_frame[raw_frame["last_modified_epoch"] >= CUTOFF_EPOCH].copy()
@@ -189,7 +216,8 @@ def main():
     raw_path = RAW / "open_food_facts_2026_snapshot.json"
     raw_payload = {
         "source": API_URL,
-        "retrieved_at_utc": datetime.now(timezone.utc).isoformat(),
+        "shared_snapshot_url": SNAPSHOT_URL,
+        "retrieved_at_utc": source_metadata.get("retrieved_at_utc") or datetime.now(timezone.utc).isoformat(),
         "cutoff_utc": CUTOFF.isoformat(),
         "page_info": page_info,
         "products": raw_products,
@@ -260,6 +288,7 @@ def main():
     manifest = {
         "dataset": "Open Food Facts product catalogue snapshot",
         "api_endpoint": API_URL,
+        "shared_snapshot_url": SNAPSHOT_URL,
         "source_url": SOURCE_URL,
         "license": LICENSE,
         "attribution": "Open Food Facts contributors",
@@ -288,6 +317,7 @@ def main():
             "source": "Open Food Facts",
             "source_url": SOURCE_URL,
             "api_endpoint": API_URL,
+            "shared_snapshot_url": SNAPSHOT_URL,
             "license": LICENSE,
             "attribution": "Open Food Facts contributors",
             "retrieved_at_utc": raw_payload["retrieved_at_utc"],
