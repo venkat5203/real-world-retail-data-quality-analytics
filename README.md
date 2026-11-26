@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Real-World Retail Data Quality & Analytics
 
 Portfolio project using the UCI Online Retail dataset. Dataset records are real historical transactions **as documented by UCI**, not independently audited. The project downloads the source, hashes the archive, checks the expected schema and row count, preserves the raw workbook, and creates audit outputs.
@@ -35,3 +36,6 @@ Portfolio project using the UCI Online Retail dataset. Dataset records are real 
 
 ## Attribution
 Chen, D. (2015). Online Retail [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5BW33. License: CC BY 4.0.
+=======
+# real-world-retail-data-quality-analytics
+>>>>>>> 256efe1714f1bf9c92d7794453e59fcf29b69eb5
