@@ -113,15 +113,9 @@ def fetch_latest_products():
 
     raw_products = [p for response in responses for p in response["products"]]
     recent = [p for p in raw_products if int(p.get("last_modified_t") or 0) >= CUTOFF_EPOCH]
-    by_code = {}
-    for product in recent:
-        code = str(product.get("code") or "").strip()
-        if not code:
-            continue
-        if code not in by_code or int(product.get("last_modified_t") or 0) > int(by_code[code].get("last_modified_t") or 0):
-            by_code[code] = product
+    unique_codes = {str(p.get("code") or "").strip() for p in recent if str(p.get("code") or "").strip()}
 
-    if not by_code:
+    if not recent:
         latest = max(stamps, default=0)
         latest_text = timestamp_iso(latest) or "unavailable"
         raise RuntimeError(
@@ -129,12 +123,13 @@ def fetch_latest_products():
             f"First page latest timestamp: {latest_text}. No old records were substituted."
         )
 
-    return list(by_code.values()), {
+    return recent, {
         "total_matching_products_reported_by_api": count,
         "pages_requested": pages,
         "page_size": PAGE_SIZE,
         "records_received_before_2026_filter": len(raw_products),
-        "records_after_2026_filter_and_barcode_deduplication": len(by_code),
+        "records_after_2026_filter_before_deduplication": len(recent),
+        "unique_barcodes_after_2026_filter": len(unique_codes),
         "sort_direction_detected": "descending" if descending else "ascending",
     }
 
@@ -183,10 +178,12 @@ def main():
     print("Fetching the most recently modified Open Food Facts product records...")
     raw_products, page_info = fetch_latest_products()
     records = [normalize(p) for p in raw_products]
-    frame = pd.DataFrame(records).sort_values("last_modified_epoch", ascending=False).reset_index(drop=True)
-    frame = frame[frame["last_modified_epoch"] >= CUTOFF_EPOCH].copy()
-    if frame.empty:
+    raw_frame = pd.DataFrame(records).sort_values("last_modified_epoch", ascending=False).reset_index(drop=True)
+    raw_frame = raw_frame[raw_frame["last_modified_epoch"] >= CUTOFF_EPOCH].copy()
+    if raw_frame.empty:
         raise RuntimeError("No 2026-updated products remain after normalization; stopping.")
+    duplicate_rows = int(raw_frame["barcode"].duplicated(keep="first").sum())
+    frame = raw_frame.drop_duplicates(subset=["barcode"], keep="first").copy()
     frame["last_modified_month"] = pd.to_datetime(frame["last_modified_epoch"], unit="s", utc=True).dt.strftime("%Y-%m")
 
     raw_path = RAW / "open_food_facts_2026_snapshot.json"
@@ -201,7 +198,6 @@ def main():
     raw_path.write_text(raw_text, encoding="utf-8")
     raw_sha = hashlib.sha256(raw_text.encode("utf-8")).hexdigest()
 
-    duplicate_rows = int(frame["barcode"].duplicated(keep="first").sum())
     audit_specs = [
         ("product_name", "Product name", frame["product_name"].eq("")),
         ("brands", "Brand", frame["brands"].eq("")),
@@ -228,7 +224,7 @@ def main():
         "field": "Duplicate barcodes",
         "rule": "duplicate_barcodes",
         "flagged_count": duplicate_rows,
-        "flagged_pct": round(100 * duplicate_rows / len(frame), 2),
+        "flagged_pct": round(100 * duplicate_rows / max(len(raw_frame), 1), 2),
         "distinct_values": int(frame["barcode"].nunique()),
     })
 
