@@ -1,11 +1,11 @@
-field,rule,flagged_count,flagged_pct,distinct_values
-Product name,product_name,18,6.08,270
-Brand,brands,66,22.3,199
-Category,categories,156,52.7,109
-Quantity / pack size,quantity,196,66.22,84
-Ingredients text,ingredients_text,180,60.81,100
-Nutrition values,nutrition,73,24.66,223
-Barcode format (8–14 digits),barcode_format,0,0.0,296
-Negative nutrient values,invalid_nutrients,0,0.0,296
-Last modified on/after 2026-01-01,updated_in_2026,0,0.0,296
-Duplicate barcodes,duplicate_barcodes,4,1.33,296
+field,rule,flagged_count,flagged_pct,distinct_values,status,note
+Product name,product_name,18.0,6.23,261,,
+Brand,brands,64.0,22.15,192,,
+Category,categories,154.0,53.29,105,,
+Quantity / pack size,quantity,196.0,67.82,80,,
+Ingredients text,ingredients_text,179.0,61.94,93,,
+Nutrition values,nutrition,71.0,24.57,218,,
+Barcode format (8–14 digits),barcode_format,0.0,0.0,289,,
+Negative nutrient values,invalid_nutrients,0.0,0.0,289,,
+Last modified on/after 2026-01-01,updated_in_2026,0.0,0.0,289,,
+Duplicate barcodes,duplicate_barcodes,,,289,not_testable_from_deduplicated_input,The shared dashboard export is already deduplicated; this check becomes available after the source-record export is published.

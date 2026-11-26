@@ -1,27 +1,33 @@
 {
   "dataset": "Open Food Facts product catalogue snapshot",
   "api_endpoint": "https://world.openfoodfacts.org/api/v2/search",
+  "shared_snapshot_url": "https://raw.githubusercontent.com/venkat5203/retailrocket-recommender/main/retailrocket-recommender/data.js",
   "source_url": "https://world.openfoodfacts.org/",
   "license": "Open Database License (ODbL) 1.0",
   "attribution": "Open Food Facts contributors",
-  "retrieved_at_utc": "2026-11-26T15:01:26.396706+00:00",
+  "retrieved_at_utc": "2026-11-26T15:05:45.294098+00:00",
   "required_last_modified_from_utc": "2026-01-01T00:00:00+00:00",
-  "earliest_included_product_update_utc": "2026-11-26T13:40:38+00:00",
-  "latest_included_product_update_utc": "2026-11-26T15:00:28+00:00",
+  "earliest_included_product_update_utc": "2026-11-26T13:42:29+00:00",
+  "latest_included_product_update_utc": "2026-11-26T15:02:21+00:00",
   "raw_snapshot_file": "open_food_facts_2026_snapshot.json",
-  "raw_snapshot_sha256": "c644376b9f72a337f1168f02022f22046216b3f135719cc4afaea46b08a41de6",
+  "raw_snapshot_sha256": "2aa5695f226d5ca7c4c1c68c88fdab7141044a09e9bb5c18e970fcce3cc62272",
   "page_info": {
-    "total_matching_products_reported_by_api": 4935608,
+    "count_reported_by_api": 4935610,
     "pages_requested": [
       1,
       2,
       3
     ],
     "page_size": 100,
-    "records_received_before_2026_filter": 300,
-    "records_after_2026_filter_before_deduplication": 300,
-    "unique_barcodes_after_2026_filter": 296,
-    "sort_direction_detected": "descending"
+    "raw_records_received": 300,
+    "unique_products_updated_since_2026": 289,
+    "sort_direction_detected": "descending",
+    "shared_raw_snapshot_url": null,
+    "shared_dashboard_snapshot_url": "https://raw.githubusercontent.com/venkat5203/retailrocket-recommender/main/retailrocket-recommender/data.js",
+    "snapshot_mode": "dashboard export (already deduplicated)",
+    "duplicate_audit_available": false,
+    "records_received_from_shared_snapshot": 289,
+    "records_after_2026_filter": 289
   },
   "data_note": "This is a product-catalogue snapshot, not sales, orders, customer purchases, or clickstream data."
 }
