@@ -1,47 +1,50 @@
-# Current Retail Product Catalogue Data Quality Analytics
+# Real-World Retail Data Quality & Analytics
 
-A reproducible Python, SQL and React analytics project auditing an Open Food Facts product-catalogue snapshot.
+A reproducible data-quality and business-analysis project built on the **UCI Online Retail** dataset. It audits real historical transaction records and produces a cleaned analysis copy, quality report, SQLite database, SQL examples and an interactive dashboard.
 
-## Data freshness and scope
-The recommender project collects the current Open Food Facts catalogue. This project reuses that shared snapshot instead of making a second burst of API requests. It prefers the un-deduplicated source export at `retailrocket-recommender/reports/source_products_2026.json`; until that export is available, it uses the recommender dashboard export. Only records whose reported last-modified timestamp is on or after 2026-01-01 UTC are kept. It stops instead of silently substituting older records when no qualifying records are returned.
+> **Dataset date range:** 1 December 2010 to 9 December 2011. These are historical source dates, not current 2026 transactions.
 
-This is a product-catalogue quality project, not a sales dataset. It does not contain retailer orders, sales revenue, customer purchases or clickstream behaviour. Do not interpret product modification dates as transaction dates.
+## Data source and provenance
 
-## Source, attribution and licence
-- Source: Open Food Facts, https://world.openfoodfacts.org/
-- Upstream API used by the recommender collector: https://world.openfoodfacts.org/api/v2/search
-- Shared snapshot: https://github.com/venkat5203/retailrocket-recommender
-- Data licence: Open Database License (ODbL) 1.0. Attribute Open Food Facts contributors and share alike under the applicable ODbL terms.
-- API documentation: https://openfoodfacts.github.io/documentation/docs/Product-Opener/v2/search/get-search/
-- Structured search and sorting by last_modified_t are documented in API v2; the collector uses a descriptive User-Agent and spaces requests to respect published usage limits.
+- Dataset: [UCI Machine Learning Repository — Online Retail](https://archive.ics.uci.edu/dataset/352/online+retail)
+- DOI: `10.24432/C5BW33`
+- Citation: Chen, D. (2015). *Online Retail*. UCI Machine Learning Repository.
+- Licence: CC BY 4.0.
+- Download archive: [online-retail.zip](https://archive.ics.uci.edu/static/public/352/online+retail.zip)
 
-## Run on Windows
-1. Install Python 3.10 or newer.
-2. Run RUN_PROJECT.bat, or use PowerShell:
-   - python -m venv .venv
-   - .venv\Scripts\activate
-   - pip install -r requirements.txt
-   - python src\pipeline.py
-3. Run the dashboard from the dashboard folder:
-   - npm install
-   - npm run dev
-4. Production build: npm run build
+The pipeline downloads the archive, records its SHA-256 hash, extracts the workbook and checks the expected schema and reference row count. A hash confirms file integrity after download; it does not independently prove the underlying business records.
+
+## What the pipeline audits
+
+- Missing values and data types across the transaction fields.
+- Exact duplicate rows.
+- Non-positive quantities and unit prices.
+- Cancellation / credit invoices (invoice numbers beginning with `C`).
+- Customer-ID completeness and customer-level analysis coverage.
+
+Rows with missing CustomerID remain available for transaction and revenue analysis, but are excluded from customer-level analysis. Cancellation rows remain identifiable and are not automatically treated as ordinary sales. The raw workbook is preserved; cleaning is applied to a separate analysis copy.
 
 ## Outputs
-- data/raw/open_food_facts_2026_snapshot.json — downloaded API response (kept local and ignored by Git)
-- reports/source_verification.json — source, retrieval time, date window, request details and SHA-256 of raw snapshot
-- reports/data_quality_audit.csv — missingness, barcode, nutrient and date checks
-- reports/kpis.json — snapshot-level quality metrics
-- reports/products_current_2026.csv — normalized product snapshot
-- reports/analysis.sqlite — products_current_2026 table for SQL analysis
-- reports/dashboard_data.json and dashboard/public/data/dashboard_data.json — dashboard payload
 
-## Quality rules
-- Include only products with last_modified_t on or after 2026-01-01 UTC.
-- Identify missing product names, brands, categories, quantity, ingredients and nutrition values.
-- Check barcode shape (8–14 digits) and negative nutrient values.
-- Check duplicate barcodes only when the un-deduplicated source export is present. The dashboard fallback is already deduplicated, so the duplicate check is explicitly marked not testable rather than reporting a misleading zero.
-- Completeness is a project-defined score over six selected fields; it is not an official Open Food Facts score.
+- `reports/source_verification.json` — source URL, archive hash, observed schema and row count.
+- `reports/data_quality_audit.csv` — missingness, duplicates and rule checks.
+- `reports/kpis.json` — transaction-quality and business KPIs.
+- `reports/clean_transactions.csv` — cleaned transaction copy.
+- `reports/analysis.sqlite` — SQLite table for SQL practice.
+- `reports/dashboard_data.json` and `dashboard/public/data/dashboard_data.json` — dashboard data payload.
 
-## Interpretation
-The API is community-contributed. The snapshot timestamp and source hash help reproduce which response was used; they do not independently prove every product claim is true.
+## Run locally on Windows
+
+1. Install Python 3.10 or later.
+2. Run `RUN_PROJECT.bat` from the project root, or execute `python src/pipeline.py`.
+3. In `dashboard/`, run `npm install` and `npm run dev`.
+
+The Vercel deployment uses the `dashboard/` application directory.
+
+## Business definitions
+
+`Revenue = Quantity × UnitPrice`. Negative quantities and cancellation invoices may represent returns or reversals. They are flagged and interpreted separately; they are not silently removed from the raw dataset.
+
+## Attribution
+
+Chen, D. (2015). *Online Retail* [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5BW33. CC BY 4.0.
