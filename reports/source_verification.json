@@ -1,5 +1,27 @@
 {
-  "status": "pending",
-  "message": "Refresh required: run python src/pipeline.py to fetch Open Food Facts products whose last-modified timestamp is on or after 2026-01-01 UTC. Historical UCI transaction data is intentionally not displayed.",
-  "required_last_modified_from_utc": "2026-01-01T00:00:00+00:00"
+  "dataset": "Open Food Facts product catalogue snapshot",
+  "api_endpoint": "https://world.openfoodfacts.org/api/v2/search",
+  "source_url": "https://world.openfoodfacts.org/",
+  "license": "Open Database License (ODbL) 1.0",
+  "attribution": "Open Food Facts contributors",
+  "retrieved_at_utc": "2026-11-26T15:01:26.396706+00:00",
+  "required_last_modified_from_utc": "2026-01-01T00:00:00+00:00",
+  "earliest_included_product_update_utc": "2026-11-26T13:40:38+00:00",
+  "latest_included_product_update_utc": "2026-11-26T15:00:28+00:00",
+  "raw_snapshot_file": "open_food_facts_2026_snapshot.json",
+  "raw_snapshot_sha256": "c644376b9f72a337f1168f02022f22046216b3f135719cc4afaea46b08a41de6",
+  "page_info": {
+    "total_matching_products_reported_by_api": 4935608,
+    "pages_requested": [
+      1,
+      2,
+      3
+    ],
+    "page_size": 100,
+    "records_received_before_2026_filter": 300,
+    "records_after_2026_filter_before_deduplication": 300,
+    "unique_barcodes_after_2026_filter": 296,
+    "sort_direction_detected": "descending"
+  },
+  "data_note": "This is a product-catalogue snapshot, not sales, orders, customer purchases, or clickstream data."
 }

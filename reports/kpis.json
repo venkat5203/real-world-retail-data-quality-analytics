@@ -1,5 +1,15 @@
 {
-  "status": "pending",
-  "message": "Refresh required: run python src/pipeline.py to fetch Open Food Facts products whose last-modified timestamp is on or after 2026-01-01 UTC. Historical UCI transaction data is intentionally not displayed.",
-  "required_last_modified_from_utc": "2026-01-01T00:00:00+00:00"
+  "products_in_snapshot": 296,
+  "average_selected_field_completeness_pct": 61.2,
+  "missing_brand_rows": 66,
+  "missing_category_rows": 156,
+  "missing_ingredients_rows": 180,
+  "missing_nutrition_rows": 73,
+  "invalid_nutrient_rows": 0,
+  "duplicate_barcode_rows": 4,
+  "products_updated_in_2026": 296,
+  "unique_categories": 23,
+  "unique_brands": 190,
+  "earliest_product_update_utc": "2026-11-26T13:40:38+00:00",
+  "latest_product_update_utc": "2026-11-26T15:00:28+00:00"
 }
