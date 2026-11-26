@@ -1,33 +1,33 @@
 {
   "dataset": "Open Food Facts product catalogue snapshot",
-  "api_endpoint": "https://world.openfoodfacts.org/api/v2/search",
-  "shared_snapshot_url": "https://raw.githubusercontent.com/venkat5203/retailrocket-recommender/main/retailrocket-recommender/data.js",
+  "api_endpoint": "https://world.openfoodfacts.net/api/v2/search",
+  "shared_snapshot_url": "https://raw.githubusercontent.com/venkat5203/retailrocket-recommender/main/retailrocket-recommender/reports/source_products_2026.json",
   "source_url": "https://world.openfoodfacts.org/",
   "license": "Open Database License (ODbL) 1.0",
   "attribution": "Open Food Facts contributors",
-  "retrieved_at_utc": "2026-11-26T15:05:45.294098+00:00",
+  "retrieved_at_utc": "2026-11-26T16:09:07.154464+00:00",
   "required_last_modified_from_utc": "2026-01-01T00:00:00+00:00",
-  "earliest_included_product_update_utc": "2026-11-26T13:42:29+00:00",
-  "latest_included_product_update_utc": "2026-11-26T15:02:21+00:00",
+  "earliest_included_product_update_utc": "2026-11-24T14:40:40+00:00",
+  "latest_included_product_update_utc": "2026-11-26T15:43:41+00:00",
   "raw_snapshot_file": "open_food_facts_2026_snapshot.json",
-  "raw_snapshot_sha256": "2aa5695f226d5ca7c4c1c68c88fdab7141044a09e9bb5c18e970fcce3cc62272",
+  "raw_snapshot_sha256": "2fde9dace027e03483e99ef9cc07c555b85580c836e4dee78179342a30d79838",
   "page_info": {
-    "count_reported_by_api": 4935610,
+    "count_reported_by_api": 4489205,
     "pages_requested": [
-      1,
-      2,
-      3
+      1
     ],
     "page_size": 100,
-    "raw_records_received": 300,
-    "unique_products_updated_since_2026": 289,
+    "raw_records_received": 100,
+    "records_updated_since_2026_before_deduplication": 100,
+    "unique_products_updated_since_2026": 100,
     "sort_direction_detected": "descending",
-    "shared_raw_snapshot_url": null,
+    "api_url": "https://world.openfoodfacts.net/api/v2/search",
+    "shared_raw_snapshot_url": "https://raw.githubusercontent.com/venkat5203/retailrocket-recommender/main/retailrocket-recommender/reports/source_products_2026.json",
     "shared_dashboard_snapshot_url": "https://raw.githubusercontent.com/venkat5203/retailrocket-recommender/main/retailrocket-recommender/data.js",
-    "snapshot_mode": "dashboard export (already deduplicated)",
-    "duplicate_audit_available": false,
-    "records_received_from_shared_snapshot": 289,
-    "records_after_2026_filter": 289
+    "snapshot_mode": "un-deduplicated source records",
+    "duplicate_audit_available": true,
+    "records_received_from_shared_snapshot": 100,
+    "records_after_2026_filter": 100
   },
   "data_note": "This is a product-catalogue snapshot, not sales, orders, customer purchases, or clickstream data."
 }

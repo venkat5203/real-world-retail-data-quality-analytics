@@ -1,15 +1,15 @@
 {
-  "products_in_snapshot": 289,
-  "average_selected_field_completeness_pct": 60.67,
-  "missing_brand_rows": 64,
-  "missing_category_rows": 154,
-  "missing_ingredients_rows": 179,
-  "missing_nutrition_rows": 71,
+  "products_in_snapshot": 100,
+  "average_selected_field_completeness_pct": 51.0,
+  "missing_brand_rows": 46,
+  "missing_category_rows": 64,
+  "missing_ingredients_rows": 39,
+  "missing_nutrition_rows": 66,
   "invalid_nutrient_rows": 0,
-  "duplicate_barcode_rows": null,
-  "products_updated_in_2026": 289,
-  "unique_categories": 23,
-  "unique_brands": 186,
-  "earliest_product_update_utc": "2026-11-26T13:42:29+00:00",
-  "latest_product_update_utc": "2026-11-26T15:02:21+00:00"
+  "duplicate_barcode_rows": 0,
+  "products_updated_in_2026": 100,
+  "unique_categories": 13,
+  "unique_brands": 34,
+  "earliest_product_update_utc": "2026-11-24T14:40:40+00:00",
+  "latest_product_update_utc": "2026-11-26T15:43:41+00:00"
 }
