@@ -1,50 +1,71 @@
 # Real-World Retail Data Quality & Analytics
 
-A reproducible data-quality and business-analysis project built on the **UCI Online Retail** dataset. It audits real historical transaction records and produces a cleaned analysis copy, quality report, SQLite database, SQL examples and an interactive dashboard.
+A reproducible data-quality and business-intelligence project using the **Retail Transactions and Stocks Data** dataset. The published source contains real store/SKU sales and inventory observations. The pipeline downloads both source files, checks their SHA-256 hashes, validates required fields and date coverage, audits data-quality issues, and generates an SQLite analytical warehouse plus an interactive dashboard.
 
-> **Dataset date range:** 1 December 2010 to 9 December 2011. These are historical source dates, not current 2026 transactions.
+> **Verified observation window:** 1 June 2025 to 24 April 2026 for sales transactions. Inventory start dates cover the same window. These dates are measured from the source CSV fields; they are not created by changing older timestamps.
 
 ## Data source and provenance
 
-- Dataset: [UCI Machine Learning Repository — Online Retail](https://archive.ics.uci.edu/dataset/352/online+retail)
-- DOI: `10.24432/C5BW33`
-- Citation: Chen, D. (2015). *Online Retail*. UCI Machine Learning Repository.
-- Licence: CC BY 4.0.
-- Download archive: [online-retail.zip](https://archive.ics.uci.edu/static/public/352/online+retail.zip)
+- Dataset: [Retail Transactions and Stocks Data — Mendeley Data](https://data.mendeley.com/datasets/27x8mjm8k4/1)
+- DOI: `10.17632/27x8mjm8k4.1`
+- Author: Jimmy Smith
+- Version: 1, published 27 April 2026
+- Licence: CC BY 4.0
+- Attribution: Smith, Jimmy (2026). *Retail Transactions and Stocks Data*, Version 1. Mendeley Data. https://doi.org/10.17632/27x8mjm8k4.1
 
-The pipeline downloads the archive, records its SHA-256 hash, extracts the workbook and checks the expected schema and reference row count. A hash confirms file integrity after download; it does not independently prove the underlying business records.
+The source contains daily transaction-level sales and on-hand stock across 40 retail storefronts and 2,326 SKUs. The public CSV mirror is used as the distribution endpoint for the automated pipeline; the Mendeley DOI remains the canonical dataset citation. The pipeline records the exact hashes of the downloaded files and the observed date range.
 
 ## What the pipeline audits
 
-- Missing values and data types across the transaction fields.
+- Missing required dates, store IDs, SKU IDs and sales amounts.
 - Exact duplicate rows.
-- Non-positive quantities and unit prices.
-- Cancellation / credit invoices (invoice numbers beginning with `C`).
-- Customer-ID completeness and customer-level analysis coverage.
+- Invalid date values and numeric fields.
+- Negative quantities and negative sales amounts, which are flagged for review rather than automatically treated as errors because returns may be present.
+- Return rows based on the source return flag and sales-type field.
+- Inventory date coverage, missing stock fields and negative on-hand values.
 
-Rows with missing CustomerID remain available for transaction and revenue analysis, but are excluded from customer-level analysis. Cancellation rows remain identifiable and are not automatically treated as ordinary sales. The raw workbook is preserved; cleaning is applied to a separate analysis copy.
+Returns and negative values are preserved in the analysis dataset and reported separately. The pipeline does not silently convert return activity into ordinary sales.
+
+## Dashboard
+
+The dark dashboard retains the same layout and includes:
+- Executive KPIs for sales rows, reported transactions, returns, sales amount, stores and SKUs.
+- Monthly sales amount trend.
+- Sales by store.
+- Top products by sales amount and units.
+- Sales by channel.
+- Latest inventory snapshot summary.
+- Source verification and data-quality audit findings.
+
+Sales amounts are displayed in source units because the source dataset description does not establish a currency denomination that this project can safely assume.
 
 ## Outputs
 
-- `reports/source_verification.json` — source URL, archive hash, observed schema and row count.
-- `reports/data_quality_audit.csv` — missingness, duplicates and rule checks.
-- `reports/kpis.json` — transaction-quality and business KPIs.
-- `reports/clean_transactions.csv` — cleaned transaction copy.
-- `reports/analysis.sqlite` — SQLite table for SQL practice.
-- `reports/dashboard_data.json` and `dashboard/public/data/dashboard_data.json` — dashboard data payload.
+- `reports/source_verification.json` — dataset DOI, source URLs, file hashes, row counts and actual observation dates.
+- `reports/data_quality_audit.csv` — field missingness and rule checks.
+- `reports/kpis.json` — sales and inventory KPIs.
+- `reports/dashboard_data.json` and `dashboard/public/data/dashboard_data.json` — compact dashboard payload.
+- `reports/analysis.sqlite` — local SQLite tables `clean_transactions` and `clean_inventory`.
+- `queries/analysis.sql` — example business and quality queries.
+
+Raw source files and the SQLite database are not committed to GitHub.
 
 ## Run locally on Windows
 
 1. Install Python 3.10 or later.
-2. Run `RUN_PROJECT.bat` from the project root, or execute `python src/pipeline.py`.
+2. Run `RUN_PROJECT.bat` from the repository root, or execute `python src/pipeline.py`.
 3. In `dashboard/`, run `npm install` and `npm run dev`.
 
-The Vercel deployment uses the `dashboard/` application directory.
+The Vercel project builds the Vite dashboard from the `dashboard/` directory.
 
-## Business definitions
+## Data integrity controls
 
-`Revenue = Quantity × UnitPrice`. Negative quantities and cancellation invoices may represent returns or reversals. They are flagged and interpreted separately; they are not silently removed from the raw dataset.
+- The pipeline verifies the exact SHA-256 of both source files before using them.
+- It rejects sales data whose minimum observation year is before 2025.
+- It calculates the displayed start/end dates from the actual transaction date values.
+- Source files are never modified; duplicates are excluded only from the cleaned analysis copy.
+- An inventory snapshot is selected by the maximum observed inventory start date.
 
-## Attribution
+## Licence and attribution
 
-Chen, D. (2015). *Online Retail* [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5BW33. CC BY 4.0.
+Dataset licence: CC BY 4.0. Please attribute the original Mendeley Data record using the author, title, version, DOI and licence above. The public GitHub mirror is a transport source, not the original publisher.
