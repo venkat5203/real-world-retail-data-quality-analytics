@@ -1,13 +1,46 @@
-field,dtype,missing_count,missing_pct,distinct_values
-InvoiceNo,object,0,0.0,25900
-StockCode,object,0,0.0,4070
-Description,object,1454,0.27,4223
-Quantity,int64,0,0.0,722
-InvoiceDate,datetime64[us],0,0.0,23260
-UnitPrice,float64,0,0.0,1630
-CustomerID,float64,135080,24.93,4372
-Country,str,0,0.0,38
-__exact_duplicate_rows__,rule,0,0.0,5268
-__quantity_le_zero__,rule,0,0.0,10624
-__unitprice_le_zero__,rule,0,0.0,2517
-__cancellation_invoice__,rule,0,0.0,9288
+field,dtype,missing_count,missing_pct,distinct_values,status
+date,datetime64[us],0,0.0,326,
+sales_type,string,0,0.0,5,
+is_return,int64,0,0.0,2,
+return_reason,string,125751,100.0,0,
+supplier,string,0,0.0,30,
+sku_id,string,0,0.0,2326,
+product_description,string,0,0.0,2313,
+division,string,0,0.0,3,
+category,string,0,0.0,27,
+subcategory,string,0,0.0,51,
+segment,string,0,0.0,600,
+store_id,string,0,0.0,40,
+sales_channel,string,0,0.0,1,
+quantity,float64,0,0.0,18,
+sales_amount,float64,0,0.0,996,
+cogs,float64,0,0.0,4992,
+number_of_transactions,int64,0,0.0,14,
+Exact duplicate rows,rule,0,0.0,0,assessed
+Invalid transaction dates,rule,0,0.0,0,assessed
+Missing store identifiers,rule,0,0.0,0,assessed
+Missing SKU identifiers,rule,0,0.0,0,assessed
+Missing sales amounts,rule,0,0.0,0,assessed
+Negative quantity rows (review returns),rule,0,0.0,7491,review
+Negative sales rows (review returns),rule,0,0.0,7491,review
+Rows flagged as returns,rule,0,0.0,7491,informational
+date,datetime64[us],0,0.0,328,
+end_date,str,0,0.0,328,
+stock_status,string,0,0.0,5,
+supplier,string,0,0.0,30,
+sku_id,string,0,0.0,2326,
+product_description,string,0,0.0,2313,
+division,string,0,0.0,3,
+category,string,0,0.0,27,
+subcategory,string,0,0.0,51,
+segment,string,0,0.0,600,
+store_id,string,0,0.0,40,
+store_type,str,0,0.0,1,
+sales_channel,string,0,0.0,1,
+on_hand,int64,0,0.0,38,
+stock_selling_amount,float64,0,0.0,633,
+cost_of_stocks,float64,0,0.0,20554,
+stock_unit_selling_price,float64,0,0.0,80,
+stock_unit_cost_price,float64,0,0.0,16137,
+Sales duplicate rows,rule,0,0.0,0,assessed
+Inventory duplicate rows,rule,0,0.0,0,assessed

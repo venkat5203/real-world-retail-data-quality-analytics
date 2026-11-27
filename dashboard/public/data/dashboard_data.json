@@ -1,306 +1,627 @@
 {
   "kpis": {
-    "source_rows": 541909,
-    "exact_duplicates": 5268,
-    "missing_customer_id_rows": 135080,
-    "cancellation_invoice_rows": 9288,
-    "nonpositive_quantity_rows": 10624,
-    "nonpositive_unit_price_rows": 2517,
-    "clean_positive_sale_rows": 524878,
-    "clean_positive_sales_revenue_gbp": 10642110.8,
-    "countries": 38,
-    "unique_customers_with_id": 4338,
-    "source_start_date": "2010-12-01 08:26:00",
-    "source_end_date": "2011-12-09 12:50:00",
-    "cleaning_policy": "Exact duplicates removed; positive quantity/price and valid dates included in positive-sales analysis. Missing customer IDs retained for sales analysis."
+    "source_rows": 125751,
+    "clean_sales_rows": 125751,
+    "exact_duplicate_rows": 0,
+    "reported_transaction_count": 131120.0,
+    "total_units_sold": 116995.0,
+    "sales_amount_total": 10482110.25,
+    "return_rows": 7491,
+    "return_sales_amount": -733571.01,
+    "store_count": 40,
+    "sku_count": 2326,
+    "sales_channel_count": 1,
+    "sales_start_date": "2025-06-01",
+    "sales_end_date": "2026-04-24",
+    "inventory_rows": 284755,
+    "latest_inventory_date": "2026-04-24",
+    "latest_inventory_units": 1229.0,
+    "inventory_store_count": 40,
+    "inventory_sku_count": 201
   },
   "monthly": [
     {
-      "InvoiceMonth": "2010-12",
-      "transaction_rows": 40991,
-      "revenue": 821452.73
+      "month": "2025-06",
+      "sales": 706683.44,
+      "units_sold": 7712.0,
+      "source_rows": 8328
     },
     {
-      "InvoiceMonth": "2011-01",
-      "transaction_rows": 34060,
-      "revenue": 689811.61
+      "month": "2025-07",
+      "sales": 855571.55,
+      "units_sold": 9545.0,
+      "source_rows": 10120
     },
     {
-      "InvoiceMonth": "2011-02",
-      "transaction_rows": 26882,
-      "revenue": 522545.55999999994
+      "month": "2025-08",
+      "sales": 1535117.21,
+      "units_sold": 17561.0,
+      "source_rows": 18517
     },
     {
-      "InvoiceMonth": "2011-03",
-      "transaction_rows": 35497,
-      "revenue": 716215.26
+      "month": "2025-09",
+      "sales": 860457.23,
+      "units_sold": 9654.0,
+      "source_rows": 10499
     },
     {
-      "InvoiceMonth": "2011-04",
-      "transaction_rows": 28882,
-      "revenue": 536968.491
+      "month": "2025-10",
+      "sales": 821266.08,
+      "units_sold": 9226.0,
+      "source_rows": 9750
     },
     {
-      "InvoiceMonth": "2011-05",
-      "transaction_rows": 35917,
-      "revenue": 769296.61
+      "month": "2025-11",
+      "sales": 871946.34,
+      "units_sold": 9527.0,
+      "source_rows": 10118
     },
     {
-      "InvoiceMonth": "2011-06",
-      "transaction_rows": 35716,
-      "revenue": 760547.01
+      "month": "2025-12",
+      "sales": 1785534.95,
+      "units_sold": 18717.0,
+      "source_rows": 19798
     },
     {
-      "InvoiceMonth": "2011-07",
-      "transaction_rows": 38395,
-      "revenue": 718076.1209999999
+      "month": "2026-01",
+      "sales": 565272.83,
+      "units_sold": 6609.0,
+      "source_rows": 7955
     },
     {
-      "InvoiceMonth": "2011-08",
-      "transaction_rows": 34264,
-      "revenue": 757841.3799999999
+      "month": "2026-02",
+      "sales": 1038967.86,
+      "units_sold": 10222.0,
+      "source_rows": 10944
     },
     {
-      "InvoiceMonth": "2011-09",
-      "transaction_rows": 48900,
-      "revenue": 1056435.192
+      "month": "2026-03",
+      "sales": 934194.48,
+      "units_sold": 11882.0,
+      "source_rows": 12902
     },
     {
-      "InvoiceMonth": "2011-10",
-      "transaction_rows": 58537,
-      "revenue": 1151263.73
-    },
-    {
-      "InvoiceMonth": "2011-11",
-      "transaction_rows": 82004,
-      "revenue": 1503866.78
-    },
-    {
-      "InvoiceMonth": "2011-12",
-      "transaction_rows": 24833,
-      "revenue": 637790.33
+      "month": "2026-04",
+      "sales": 507098.27999999997,
+      "units_sold": 6340.0,
+      "source_rows": 6820
     }
   ],
-  "countries": [
+  "stores": [
     {
-      "Country": "United Kingdom",
-      "rows": 479985,
-      "revenue": 9001744.094
+      "store_id": "STR-1006",
+      "sales": 485561.44,
+      "units_sold": 5619.0,
+      "source_rows": 5904
     },
     {
-      "Country": "Netherlands",
-      "rows": 2359,
-      "revenue": 285446.34
+      "store_id": "STR-1229",
+      "sales": 399696.48,
+      "units_sold": 3817.0,
+      "source_rows": 3994
     },
     {
-      "Country": "EIRE",
-      "rows": 7879,
-      "revenue": 283140.52
+      "store_id": "STR-1080",
+      "sales": 371277.03,
+      "units_sold": 3461.0,
+      "source_rows": 3639
     },
     {
-      "Country": "Germany",
-      "rows": 9025,
-      "revenue": 228678.4
+      "store_id": "STR-1194",
+      "sales": 346391.52999999997,
+      "units_sold": 4056.0,
+      "source_rows": 4323
     },
     {
-      "Country": "France",
-      "rows": 8392,
-      "revenue": 209625.37
+      "store_id": "STR-1010",
+      "sales": 343436.84,
+      "units_sold": 4554.0,
+      "source_rows": 4916
     },
     {
-      "Country": "Australia",
-      "rows": 1181,
-      "revenue": 138453.81
+      "store_id": "STR-1235",
+      "sales": 335338.71,
+      "units_sold": 3082.0,
+      "source_rows": 3186
     },
     {
-      "Country": "Spain",
-      "rows": 2479,
-      "revenue": 61558.56
+      "store_id": "STR-1148",
+      "sales": 332396.05,
+      "units_sold": 4392.0,
+      "source_rows": 4705
     },
     {
-      "Country": "Switzerland",
-      "rows": 1958,
-      "revenue": 57067.6
+      "store_id": "STR-1094",
+      "sales": 332104.96,
+      "units_sold": 4024.0,
+      "source_rows": 4300
     },
     {
-      "Country": "Belgium",
-      "rows": 2031,
-      "revenue": 41196.34
+      "store_id": "STR-1222",
+      "sales": 329188.1,
+      "units_sold": 3200.0,
+      "source_rows": 3446
     },
     {
-      "Country": "Sweden",
-      "rows": 450,
-      "revenue": 38367.83
+      "store_id": "STR-1044",
+      "sales": 328466.36,
+      "units_sold": 3945.0,
+      "source_rows": 4179
     },
     {
-      "Country": "Japan",
-      "rows": 321,
-      "revenue": 37416.369999999995
+      "store_id": "STR-1075",
+      "sales": 327931.8,
+      "units_sold": 3695.0,
+      "source_rows": 3947
     },
     {
-      "Country": "Norway",
-      "rows": 1071,
-      "revenue": 36165.44
+      "store_id": "STR-1198",
+      "sales": 324919.24,
+      "units_sold": 4805.0,
+      "source_rows": 4995
     }
   ],
   "products": [
     {
-      "StockCode": "DOT",
-      "Description": "DOTCOM POSTAGE",
-      "units": 706,
-      "revenue": 206248.77
+      "sku_id": "PROD-140871",
+      "product_description": "PROD-100439 SEG-500064 Scholar Footwear Boot Collection Woodland",
+      "units": 915.0,
+      "sales": 104027.5,
+      "source_rows": 893
     },
     {
-      "StockCode": 22423,
-      "Description": "REGENCY CAKESTAND 3 TIER",
-      "units": 13851,
-      "revenue": 174156.54
+      "sku_id": "PROD-100805",
+      "product_description": "PROD-102578 SEG-500351 Scholar Footwear Flight Classic Zephyr",
+      "units": 1170.0,
+      "sales": 102481.99,
+      "source_rows": 1121
     },
     {
-      "StockCode": 23843,
-      "Description": "PAPER CRAFT , LITTLE BIRDIE",
-      "units": 80995,
-      "revenue": 168469.6
+      "sku_id": "PROD-100804",
+      "product_description": "PROD-102576 SEG-500351 Scholar Footwear Flight Classic Zephyr",
+      "units": 834.0,
+      "sales": 72822.5,
+      "source_rows": 838
     },
     {
-      "StockCode": "85123A",
-      "Description": "WHITE HANGING HEART T-LIGHT HOLDER",
-      "units": 37580,
-      "revenue": 104284.24
+      "sku_id": "PROD-100803",
+      "product_description": "PROD-102577 SEG-500351 Scholar Footwear Flight Classic Zephyr",
+      "units": 816.0,
+      "sales": 71496.48,
+      "source_rows": 817
     },
     {
-      "StockCode": 47566,
-      "Description": "PARTY BUNTING",
-      "units": 18283,
-      "revenue": 99445.23
+      "sku_id": "PROD-140870",
+      "product_description": "PROD-100438 SEG-500064 Scholar Footwear Boot Collection Woodland",
+      "units": 546.0,
+      "sales": 61705.0,
+      "source_rows": 565
     },
     {
-      "StockCode": "85099B",
-      "Description": "JUMBO BAG RED RETROSPOT",
-      "units": 48371,
-      "revenue": 94159.81
+      "sku_id": "PROD-175338",
+      "product_description": "PROD-113366 SEG-502458 Heritage Footwear Retro Legend Summit",
+      "units": 316.0,
+      "sales": 60040.0,
+      "source_rows": 46
     },
     {
-      "StockCode": 23166,
-      "Description": "MEDIUM CERAMIC TOP STORAGE JAR",
-      "units": 78033,
-      "revenue": 81700.92000000001
+      "sku_id": "PROD-100802",
+      "product_description": "PROD-102574 SEG-500351 Scholar Footwear Flight Classic Zephyr",
+      "units": 640.0,
+      "sales": 56361.5,
+      "source_rows": 660
     },
     {
-      "StockCode": "POST",
-      "Description": "POSTAGE",
-      "units": 3150,
-      "revenue": 78101.88
+      "sku_id": "PROD-140869",
+      "product_description": "PROD-100437 SEG-500064 Scholar Footwear Boot Collection Woodland",
+      "units": 483.0,
+      "sales": 55251.9,
+      "source_rows": 500
     },
     {
-      "StockCode": "M",
-      "Description": "Manual",
-      "units": 6984,
-      "revenue": 77750.27
+      "sku_id": "PROD-175334",
+      "product_description": "PROD-113357 SEG-502458 Heritage Footwear Retro Legend Summit",
+      "units": 269.0,
+      "sales": 51110.0,
+      "source_rows": 59
     },
     {
-      "StockCode": 23084,
-      "Description": "RABBIT NIGHT LIGHT",
-      "units": 30739,
-      "revenue": 66870.03
+      "sku_id": "PROD-152143",
+      "product_description": "PROD-162923 SEG-514991 Heritage Footwear Retro Legend Summit",
+      "units": 288.0,
+      "sales": 45672.0,
+      "source_rows": 208
     },
     {
-      "StockCode": 22086,
-      "Description": "PAPER CHAIN KIT 50'S CHRISTMAS ",
-      "units": 19329,
-      "revenue": 64875.590000000004
+      "sku_id": "PROD-100801",
+      "product_description": "PROD-102575 SEG-500351 Scholar Footwear Flight Classic Zephyr",
+      "units": 514.0,
+      "sales": 44663.49,
+      "source_rows": 531
     },
     {
-      "StockCode": 84879,
-      "Description": "ASSORTED COLOUR BIRD ORNAMENT",
-      "units": 36362,
-      "revenue": 58927.62
+      "sku_id": "PROD-140868",
+      "product_description": "PROD-100436 SEG-500064 Scholar Footwear Boot Collection Woodland",
+      "units": 358.0,
+      "sales": 40419.5,
+      "source_rows": 387
+    },
+    {
+      "sku_id": "PROD-140879",
+      "product_description": "PROD-100422 SEG-500063 Scholar Footwear Boot Collection Woodland",
+      "units": 340.0,
+      "sales": 39574.0,
+      "source_rows": 369
+    },
+    {
+      "sku_id": "PROD-166366",
+      "product_description": "PROD-102544 SEG-500347 Scholar Footwear Trailblazer Equilibrium",
+      "units": 356.0,
+      "sales": 39218.75,
+      "source_rows": 379
+    },
+    {
+      "sku_id": "PROD-178777",
+      "product_description": "PROD-113925 SEG-502507 Heritage Footwear Retro Legend Summit",
+      "units": 227.0,
+      "sales": 37405.5,
+      "source_rows": 57
+    }
+  ],
+  "channels": [
+    {
+      "sales_channel": "Channel Alpha",
+      "sales": 10482110.25,
+      "rows": 125751
     }
   ],
   "audit": [
     {
-      "field": "InvoiceNo",
-      "dtype": "object",
-      "missing_count": 0,
-      "missing_pct": 0.0,
-      "distinct_values": 25900
-    },
-    {
-      "field": "StockCode",
-      "dtype": "object",
-      "missing_count": 0,
-      "missing_pct": 0.0,
-      "distinct_values": 4070
-    },
-    {
-      "field": "Description",
-      "dtype": "object",
-      "missing_count": 1454,
-      "missing_pct": 0.27,
-      "distinct_values": 4223
-    },
-    {
-      "field": "Quantity",
-      "dtype": "int64",
-      "missing_count": 0,
-      "missing_pct": 0.0,
-      "distinct_values": 722
-    },
-    {
-      "field": "InvoiceDate",
+      "field": "date",
       "dtype": "datetime64[us]",
       "missing_count": 0,
       "missing_pct": 0.0,
-      "distinct_values": 23260
+      "distinct_values": 326
     },
     {
-      "field": "UnitPrice",
+      "field": "sales_type",
+      "dtype": "string",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 5
+    },
+    {
+      "field": "is_return",
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 2
+    },
+    {
+      "field": "return_reason",
+      "dtype": "string",
+      "missing_count": 125751,
+      "missing_pct": 100.0,
+      "distinct_values": 0
+    },
+    {
+      "field": "supplier",
+      "dtype": "string",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 30
+    },
+    {
+      "field": "sku_id",
+      "dtype": "string",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 2326
+    },
+    {
+      "field": "product_description",
+      "dtype": "string",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 2313
+    },
+    {
+      "field": "division",
+      "dtype": "string",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 3
+    },
+    {
+      "field": "category",
+      "dtype": "string",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 27
+    },
+    {
+      "field": "subcategory",
+      "dtype": "string",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 51
+    },
+    {
+      "field": "segment",
+      "dtype": "string",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 600
+    },
+    {
+      "field": "store_id",
+      "dtype": "string",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 40
+    },
+    {
+      "field": "sales_channel",
+      "dtype": "string",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 1
+    },
+    {
+      "field": "quantity",
       "dtype": "float64",
       "missing_count": 0,
       "missing_pct": 0.0,
-      "distinct_values": 1630
+      "distinct_values": 18
     },
     {
-      "field": "CustomerID",
+      "field": "sales_amount",
       "dtype": "float64",
-      "missing_count": 135080,
-      "missing_pct": 24.93,
-      "distinct_values": 4372
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 996
     },
     {
-      "field": "Country",
+      "field": "cogs",
+      "dtype": "float64",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 4992
+    },
+    {
+      "field": "number_of_transactions",
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 14
+    },
+    {
+      "field": "Exact duplicate rows",
+      "dtype": "rule",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 0,
+      "status": "assessed"
+    },
+    {
+      "field": "Invalid transaction dates",
+      "dtype": "rule",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 0,
+      "status": "assessed"
+    },
+    {
+      "field": "Missing store identifiers",
+      "dtype": "rule",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 0,
+      "status": "assessed"
+    },
+    {
+      "field": "Missing SKU identifiers",
+      "dtype": "rule",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 0,
+      "status": "assessed"
+    },
+    {
+      "field": "Missing sales amounts",
+      "dtype": "rule",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 0,
+      "status": "assessed"
+    },
+    {
+      "field": "Negative quantity rows (review returns)",
+      "dtype": "rule",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 7491,
+      "status": "review"
+    },
+    {
+      "field": "Negative sales rows (review returns)",
+      "dtype": "rule",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 7491,
+      "status": "review"
+    },
+    {
+      "field": "Rows flagged as returns",
+      "dtype": "rule",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 7491,
+      "status": "informational"
+    },
+    {
+      "field": "date",
+      "dtype": "datetime64[us]",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 328
+    },
+    {
+      "field": "end_date",
       "dtype": "str",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 328
+    },
+    {
+      "field": "stock_status",
+      "dtype": "string",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 5
+    },
+    {
+      "field": "supplier",
+      "dtype": "string",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 30
+    },
+    {
+      "field": "sku_id",
+      "dtype": "string",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 2326
+    },
+    {
+      "field": "product_description",
+      "dtype": "string",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 2313
+    },
+    {
+      "field": "division",
+      "dtype": "string",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 3
+    },
+    {
+      "field": "category",
+      "dtype": "string",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 27
+    },
+    {
+      "field": "subcategory",
+      "dtype": "string",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 51
+    },
+    {
+      "field": "segment",
+      "dtype": "string",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 600
+    },
+    {
+      "field": "store_id",
+      "dtype": "string",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 40
+    },
+    {
+      "field": "store_type",
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 1
+    },
+    {
+      "field": "sales_channel",
+      "dtype": "string",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 1
+    },
+    {
+      "field": "on_hand",
+      "dtype": "int64",
       "missing_count": 0,
       "missing_pct": 0.0,
       "distinct_values": 38
     },
     {
-      "field": "__exact_duplicate_rows__",
-      "dtype": "rule",
+      "field": "stock_selling_amount",
+      "dtype": "float64",
       "missing_count": 0,
-      "missing_pct": 0,
-      "distinct_values": 5268
+      "missing_pct": 0.0,
+      "distinct_values": 633
     },
     {
-      "field": "__quantity_le_zero__",
-      "dtype": "rule",
+      "field": "cost_of_stocks",
+      "dtype": "float64",
       "missing_count": 0,
-      "missing_pct": 0,
-      "distinct_values": 10624
+      "missing_pct": 0.0,
+      "distinct_values": 20554
     },
     {
-      "field": "__unitprice_le_zero__",
-      "dtype": "rule",
+      "field": "stock_unit_selling_price",
+      "dtype": "float64",
       "missing_count": 0,
-      "missing_pct": 0,
-      "distinct_values": 2517
+      "missing_pct": 0.0,
+      "distinct_values": 80
     },
     {
-      "field": "__cancellation_invoice__",
+      "field": "stock_unit_cost_price",
+      "dtype": "float64",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 16137
+    },
+    {
+      "field": "Sales duplicate rows",
       "dtype": "rule",
       "missing_count": 0,
-      "missing_pct": 0,
-      "distinct_values": 9288
+      "missing_pct": 0.0,
+      "distinct_values": 0,
+      "status": "assessed"
+    },
+    {
+      "field": "Inventory duplicate rows",
+      "dtype": "rule",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "distinct_values": 0,
+      "status": "assessed"
     }
-  ]
+  ],
+  "source": {
+    "dataset": "Retail Transactions and Stocks Data",
+    "publisher": "Mendeley Data",
+    "dataset_doi": "10.17632/27x8mjm8k4.1",
+    "publisher_url": "https://data.mendeley.com/datasets/27x8mjm8k4/1",
+    "license": "CC BY 4.0",
+    "attribution": "Smith, Jimmy (2026). Retail Transactions and Stocks Data, Version 1. Mendeley Data. https://doi.org/10.17632/27x8mjm8k4.1",
+    "distribution_note": "The files were inspected and retrieved from a public GitHub mirror of the Mendeley dataset. The Mendeley DOI is the canonical dataset citation.",
+    "sales_source_url": "https://raw.githubusercontent.com/shreyayp/RetailPulse/main/data/raw/retail_sales_ml_apl.csv",
+    "inventory_source_url": "https://raw.githubusercontent.com/shreyayp/RetailPulse/main/data/raw/retail_inventory_ml_apl.csv",
+    "sales_archive_sha256": "da4763939baed1f46bfca7e893f9512a0294544494b1e794e5b8f2c59efbd2a1",
+    "inventory_archive_sha256": "c765678a26c2d024e8300b8f5b4a67cb2e2bde6e24213f202914557d000ce37d",
+    "sales_observed_rows": 125751,
+    "inventory_observed_rows": 284755,
+    "sales_date_min": "2025-06-01",
+    "sales_date_max": "2026-04-24",
+    "inventory_start_date_min": "2025-06-01",
+    "inventory_start_date_max": "2026-04-24",
+    "inventory_latest_snapshot_date": "2026-04-24",
+    "checked_at_utc": "2026-11-27T04:09:41.417046+00:00",
+    "date_note": "Calendar range is measured directly from Transaction Date and inventory Start Date fields; dataset publication year is not used as a substitute."
+  }
 }
