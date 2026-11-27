@@ -132,8 +132,8 @@ def prepare_sales(raw: pd.DataFrame) -> tuple[pd.DataFrame, dict, list[dict]]:
 
     duplicate_rows = int(df.duplicated().sum())
     invalid_date_rows = int(df["date"].isna().sum())
-    missing_store_rows = int(df["store_id"].isna().sum() | (df["store_id"] == "").fillna(False).sum())
-    missing_sku_rows = int(df["sku_id"].isna().sum() | (df["sku_id"] == "").fillna(False).sum())
+    missing_store_rows = int((df["store_id"].isna() | df["store_id"].fillna("").astype("string").eq("")).sum())
+    missing_sku_rows = int((df["sku_id"].isna() | df["sku_id"].fillna("").astype("string").eq("")).sum())
     invalid_sales_rows = int(df["sales_amount"].isna().sum())
     negative_quantity_rows = int((df["quantity"] < 0).sum())
     negative_sales_rows = int((df["sales_amount"] < 0).sum())
