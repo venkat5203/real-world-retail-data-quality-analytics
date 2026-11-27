@@ -1,0 +1,44 @@
+name: Refresh 2025-2026 retail sales and inventory
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/pipeline.py"
+      - "dashboard/src/main.jsx"
+      - "queries/analysis.sql"
+      - ".github/workflows/refresh-retail-transactions.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: retail-transactions-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Download, verify and audit 2025-2026 sales and inventory
+        run: python src/pipeline.py
+      - name: Commit refreshed dashboard and audit outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/kpis.json reports/source_verification.json reports/data_quality_audit.csv reports/dashboard_data.json dashboard/public/data/dashboard_data.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Refresh verified 2025-2026 retail sales and inventory dashboard"
+            git pull --rebase origin main
+            git push
+          fi
