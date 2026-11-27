@@ -1,0 +1,85 @@
+{
+  "assessment_run_utc": "2026-11-27T04:04:55.685352+00:00",
+  "dataset": "Retail Transactions and Stocks Data",
+  "dataset_doi": "10.17632/27x8mjm8k4.1",
+  "publisher_page": "https://data.mendeley.com/datasets/27x8mjm8k4/1",
+  "dataset_license": "CC BY 4.0",
+  "candidate_distribution": "Public GitHub mirror used only for inspection; cite and attribute the original Mendeley Data record.",
+  "files": {
+    "sales": {
+      "filename": "retail_sales_ml_apl.csv",
+      "source_url": "https://raw.githubusercontent.com/shreyayp/RetailPulse/main/data/raw/retail_sales_ml_apl.csv",
+      "bytes": 39072489,
+      "sha256": "da4763939baed1f46bfca7e893f9512a0294544494b1e794e5b8f2c59efbd2a1",
+      "rows": 125751,
+      "columns": [
+        "Transaction Date",
+        "Sales Type",
+        "Is Return",
+        "Reason of Return",
+        "Supplier",
+        "Product No",
+        "Product Description",
+        "Product Division",
+        "Product Category",
+        "Product Subcategory",
+        "Product Segment",
+        "Store",
+        "Sales Channel",
+        "Qty Sold",
+        "Sales Amount",
+        "Cogs",
+        "Number of Transactions"
+      ],
+      "date_fields": {
+        "Transaction Date": {
+          "min": "2025-06-01 00:00:00",
+          "max": "2026-04-24 00:00:00",
+          "valid": 125751,
+          "invalid": 0
+        }
+      }
+    },
+    "inventory": {
+      "filename": "retail_inventory_ml_apl.csv",
+      "source_url": "https://raw.githubusercontent.com/shreyayp/RetailPulse/main/data/raw/retail_inventory_ml_apl.csv",
+      "bytes": 99994250,
+      "sha256": "c765678a26c2d024e8300b8f5b4a67cb2e2bde6e24213f202914557d000ce37d",
+      "rows": 284755,
+      "columns": [
+        "Start Date",
+        "End Date",
+        "Stock Status",
+        "Supplier",
+        "Product No",
+        "Product Description",
+        "Product Division",
+        "Product Category",
+        "Product Subcategory",
+        "Product Segment",
+        "Store",
+        "Store Type",
+        "Sales Channel",
+        "Qty on hand",
+        "Stocks Selling Amount",
+        "Cost of Stocks",
+        "Stock Unit Selling Price",
+        "Stock Unit Cost Price"
+      ],
+      "date_fields": {
+        "Start Date": {
+          "min": "2025-06-01 00:00:00",
+          "max": "2026-04-24 00:00:00",
+          "valid": 284755,
+          "invalid": 0
+        },
+        "End Date": {
+          "min": "2025-06-01 00:00:00",
+          "max": "9999-12-31 00:00:00",
+          "valid": 284755,
+          "invalid": 0
+        }
+      }
+    }
+  }
+}
